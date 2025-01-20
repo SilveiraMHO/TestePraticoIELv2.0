@@ -1,0 +1,101 @@
+﻿@{
+    ViewData["Title"] = "Estudante Form";
+}
+
+@model CadWeb.Models.EstudanteViewModel
+
+<div class="d-flex justify-content-between">
+    <button type="button" class="btn btn-outline-warning" onclick="voltarListagem()">Back</button>
+    <h2>Novo Estudante</h2>
+</div>
+<hr />
+
+<form asp-controller="Estudante" asp-action="Form" method="post">
+    <div class="row g-3">
+        <div class="col-3">
+            <label class="form-label">CPF</label>
+            @Html.TextBoxFor(model => model.Cpf, new { @class = "form-control", @maxlength = "11", @id = "cpf" })
+            <span asp-validation-for="Cpf" class="text-danger"></span>
+        </div>
+        <div class="col-9">
+            <label class="form-label">Nome Completo</label>
+            @Html.TextBoxFor(model => model.Nome, new { @class = "form-control", @maxlength = "100" })
+            <span asp-validation-for="Nome" class="text-danger"></span>
+        </div>
+        <div class="col-12">
+            <label class="form-label">Endereço</label>
+            @Html.TextBoxFor(model => model.Endereco, new { @class = "form-control", @maxlength = "200" })
+            <span asp-validation-for="Endereco" class="text-danger"></span>
+        </div>
+        <div class="col-9">
+            <label class="form-label">Nome do Curso</label>
+            @Html.TextBoxFor(model => model.NomeCurso, new { @class = "form-control", @maxlength = "100" })
+            <span asp-validation-for="NomeCurso" class="text-danger"></span>
+        </div>
+        <div class="col-3">
+            <label class="form-label">Data de Conclusão</label>
+            @Html.TextBoxFor(model => model.DataConclusao, new { @class = "form-control", @type = "date" })
+            <span asp-validation-for="DataConclusao" class="text-danger"></span>
+        </div>
+        <div class="col-3">
+            <label class="form-label">Estado</label>
+            @Html.DropDownListFor(model => model.SelectedEstadoUF, Model.EstadoSelectList, new { @class = "form-select", @id = "estado", @onchange = "carregarCidades()" })
+            <span asp-validation-for="SelectedEstadoUF" class="text-danger"></span>
+        </div>
+        <div class="col-3">
+            <label class="form-label">Cidade</label>
+            @Html.DropDownListFor(model => model.SelectedCidadeValue, Model.CidadeSelectList, new { @class = "form-select", id = "cidade" })
+            <span asp-validation-for="SelectedCidadeValue" class="text-danger"></span>
+        </div>
+        <div class="col-6">
+            <label class="form-label">Instituição de Ensino</label>
+            @Html.DropDownListFor(model => model.SelectedInstituicaoEnsinoId, Model.InstituicaoEnsinoSelectList, new { @class = "form-select" })
+            <span asp-validation-for="SelectedInstituicaoEnsinoId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-12 mt-5">
+        <button type="submit" class="btn btn-success float-end">Save</button>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#cpf').mask('000.000.000-00');
+        });
+
+        function voltarListagem() {
+            window.location = '@Url.Action("Index", "Estudante")';
+        }
+
+        async function carregarCidades() {
+            const estadoSelecionado = document.getElementById("estado").value;
+            const cidadeSelect = document.getElementById("cidade");
+
+            if (estadoSelecionado === "0") {
+                cidadeSelect.innerHTML = '<option value="0">Selecione um estado...</option>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/Estudante/GetCidadesPorEstado?uf=${estadoSelecionado}`);
+                if (!response.ok) {
+                    alert("Erro ao carregar cidades.");
+                    return;
+                }
+
+                const cidades = await response.json();
+                cidadeSelect.innerHTML = '<option value="0">Selecione...</option>';
+                cidades.forEach(cidade => {
+                    const option = document.createElement("option");
+                    option.value = cidade.text; //cidade.value;
+                    option.textContent = cidade.text;
+                    cidadeSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Erro ao carregar cidades:", error);
+                alert("Erro ao carregar cidades.");
+            }
+        }
+    </script>
+}

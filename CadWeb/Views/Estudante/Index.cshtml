@@ -1,0 +1,88 @@
+﻿@{
+    ViewData["Title"] = "Estudantes";
+}
+
+@model List<CadWeb.Models.EstudanteViewModel>
+
+<div class="d-flex justify-content-between">
+    <div class="col-3">
+        <h2>Estudantes</h2>
+    </div>
+    <div>
+        <input type="text" id="searchInput" class="form-control" placeholder="Pesquisar..." onkeyup="filterTable()" />
+    </div>
+    <div class="col-3 text-end">
+        <button type="button" class="btn btn-success" onclick="criarEstudante()">Novo</button>
+    </div>
+</div>
+<hr />
+
+@if (Model.Count() != 0)
+{
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>CPF</th>
+                <th>Nome</th>
+                <th>Curso</th>
+                <th>Instituição</th>
+                <th>Conclusão</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="cursor-pointer" onclick="editarEstudante('@item.Cpf')">
+                    <td>@item.Cpf</td>
+                    <td>@item.Nome</td>
+                    <td>@item.NomeCurso</td>
+                    <td>@item.InstituicaoEnsino</td>
+                    <td>@item.DataConclusaoString</td>
+                    <td class="text-end">
+                        <button type="button" class="btn btn-outline-danger btn-sm" title="Excluir" onclick="deletarEstudante('@item.Cpf')">X</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="text-center">
+        <h4 class="mt-3">Nenhum estudante registrado.</h4>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        function criarEstudante() {
+            window.location = '@Url.Action("Form", "Estudante")';
+        };
+
+        function editarEstudante(id) {
+            window.location = '@Url.Action("Form", "Estudante")/' + id;
+        };
+
+        function deletarEstudante(id) {
+            event.stopPropagation();
+
+            let result = confirm("Tem certeza que deseja excluir o estudante?");
+
+            if (result) {
+                window.location = '@Url.Action("Delete", "Estudante")/' + id;
+            }
+        };
+
+        function filterTable() {
+            let input = document.getElementById("searchInput").value.toLowerCase();
+            let rows = document.querySelectorAll("tbody tr");
+
+            rows.forEach(row => {
+                let columns = Array.from(row.querySelectorAll("td"));
+                let match = columns.some(column => column.textContent.toLowerCase().includes(input));
+                row.style.display = match ? "" : "none";
+            });
+        };
+    </script>
+}

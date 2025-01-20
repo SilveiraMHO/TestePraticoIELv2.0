@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Relatório de Estudantes por Instituição";
+}
+
+@model CadWeb.Models.Relatorios.EstudantesPorInstituicaoFiltro
+
+<h1>Relatórios</h1>
+<h4>Estudantes por Instituição</h4>
+
+<form method="get" asp-action="EstudantesPorInstituicao" asp-controller="Relatorio">
+    <div class="row g-3 mt-3">
+        <div class="col-9">
+            <div class="form-group">
+                <label class="form-label">Instituição de Ensino</label>
+                @Html.DropDownListFor(model => model.SelectedInstituicaoEnsinoId, Model.InstituicaoEnsinoSelectList, new { @class = "form-select" })
+                <span asp-validation-for="SelectedInstituicaoEnsinoId" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 mt-3">
+            <button type="submit" class="btn btn-primary float-end">Filtrar</button>
+        </div>
+    </div>
+</form>
+
+<hr />
+
+@if (!Model.Estudantes.Any())
+{
+    <p>Nenhum estudante encontrado para a instituição informada.</p>
+}
+else
+{
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Curso</th>
+                <th>Data de Conclusão</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var estudante in Model.Estudantes)
+            {
+                <tr>
+                    <td>@estudante.Nome</td>
+                    <td>@estudante.Cpf</td>
+                    <td>@estudante.NomeCurso</td>
+                    <td>@estudante.DataConclusao</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button class="btn btn-secondary mt-3" onclick="window.print()">Imprimir</button>
+}

@@ -1,0 +1,112 @@
+﻿@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+
+@model CadWeb.Models.LoginViewModel
+
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+<!-- Toastr CSS -->
+<link href="~/lib/toastr.js/toastr.css" rel="stylesheet" />
+
+<body>
+    <header>
+        <input type="hidden" id="success"
+                value="@TempData["success"]" />
+        <input type="hidden" id="info"
+                value="@TempData["info"]" />
+        <input type="hidden" id="warning"
+                value="@TempData["warning"]" />
+        <input type="hidden" id="error"
+                value="@TempData["error"]" />
+    </header>
+    <div class="container">
+        <form asp-controller="Login" asp-action="Index" method="post" onsubmit="loading()">
+            <div class="row">
+                <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+                    <!-- Largura de 25%-->
+                    <div class="card w-25">
+                        <div class="card-body">
+                            <h1 class="text-center">CadWeb IEL</h1>
+                            <hr />
+                            <h4 class="card-title mb-4 mt-1 text-center">Sign in</h4>
+                            <div class="form-floating mb-3">
+                                <input type="text" asp-for="Usuario" class="form-control" placeholder="User" maxlength="20"> @*O asp-for gera os atributos id e name com o valor atribuído (Usuario).*@
+                                <label for="Usuario">Usuário</label>
+                                <span asp-validation-for="Usuario" class="text-danger"></span>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="password" asp-for="Senha" class="form-control" placeholder="******" maxlength="20">
+                                <label for="Senha">Senha</label>
+                                <span asp-validation-for="Senha" class="text-danger"></span>
+                            </div>
+                            <div class="text-center mb-3">
+                                <span class="text-danger">@ViewData["ErroLogin"]</span>
+                            </div>
+                            <div class="col mb-3">
+                                <button id="btnLogin" type="submit" class="btn btn-primary w-100 d-flex align-items-center justify-content-center">
+                                    Login &nbsp;
+                                    <div id="spinnerBtnLogin" class="spinner-border spinner-border-sm text-light" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/toastr.js/toastr.min.js"></script>
+<script>
+    $(function () {
+        var displayMessage = function (message, msgType) {
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+            toastr[msgType](message);
+        };
+
+        if ($('#success').val()) {
+            displayMessage($('#success').val(), 'success');
+        }
+        if ($('#info').val()) {
+            displayMessage($('#info').val(), 'info');
+        }
+        if ($('#warning').val()) {
+            displayMessage($('#warning').val(), 'warning');
+        }
+        if ($('#error').val()) {
+            displayMessage($('#error').val(), 'error');
+        }
+    });
+</script>
+
+<script>
+    document.getElementById('btnLogin').disabled = false;
+    document.getElementById('spinnerBtnLogin').style.display = "none";
+
+    function loading() {
+        document.getElementById('btnLogin').disabled = true;
+        document.getElementById('spinnerBtnLogin').style.display = "block";
+    }
+</script>
