@@ -1,5 +1,5 @@
-# CadastroIEL
-TESTE PRÁTICO - Solução responsável por manter o cadastro de estudantes do IEL.
+# TESTE PRÁTICO IEL v2.0
+Este projeto tem o nome de "CadWeb" e possui o objetivo (fictício) manter o cadastro de estudantes da IEL.
 
 ## Informações técnicas:
 Este é um projeto criado no Visual Studio 2022 Community Edition com as seguintes tecnologias:
@@ -17,6 +17,6 @@ O projeto também adota as seguintes bibliotecas:
 Como mencionado, o projeto está todo mapeado e configurado com o ORM EF, com isso, existe a possibilidade de se trabalhar com CodeFirst, gerando a base de dados por Migration.
 Para isso é necessário baixar as bibliotecas necessárias.
 
-Para executar o projeto é necessário criar a base de dados e suas tabelas através do arquivo "Create_CadWebDb.sql" e para popular as tabelas basta executar o script do arquivo "Inserts_CadWebDb".
+Para executar e navegar nas funcionalidades da solução é necessário criar a base de dados e suas tabelas através do arquivo "Create_CadWebDb.sql" e para popular as tabelas basta executar o script do arquivo "Inserts_CadWebDb".
 
-Por motivo de segurança, os arquivos "appsettings.json" e "appsettings.Development.json" não constam no repositório.
+Por motivos de segurança, os arquivos "appsettings.json" e "appsettings.Development.json" não constam no repositório.
