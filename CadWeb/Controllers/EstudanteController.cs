@@ -40,8 +40,9 @@ namespace CadWeb.Controllers
                     Cpf = CpfFormatter.FormatarCpf(estudante.Cpf),
                     Nome = estudante.Nome,
                     Cidade = estudante.Cidade,
+                    UF = estudante.Estado.UF,
                     NomeCurso = estudante.NomeCurso,
-                    InstituicaoEnsino = estudante.InstituicaoEnsino.Nome,
+                    //InstituicaoEnsino = estudante.InstituicaoEnsino.Nome,
                     DataConclusaoString = estudante.DataConclusao.ToString("dd/MM/yyyy"),
                 });
             }
